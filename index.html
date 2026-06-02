@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>June 2026 Marathon + Abs + Muscle Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">June 2026 Marathon + Abs + Muscle Plan</p>
+          <h1>Build consistency, not hero workouts.</h1>
+          <p class="hero-text">
+            June is built around marathon base work, a leaner waist, and more
+            upper-body muscle. The weekly rhythm is fixed: gym on Monday,
+            Wednesday, and Friday, runs on Tuesday, Thursday, and Sunday,
+            indoor cricket on Saturday, and body check-ins every Monday.
+          </p>
+          <div id="heroTags" class="hero-tags" aria-label="Monthly highlights"></div>
+        </div>
+
+        <aside class="panel-card snapshot-card" aria-labelledby="snapshotHeading">
+          <div class="snapshot-head">
+            <div>
+              <p class="eyebrow">Month Snapshot</p>
+              <h2 id="snapshotHeading">Training Rhythm</h2>
+            </div>
+            <div class="panel-actions">
+              <button id="clearData" class="ghost-button" type="button">Reset Saved Data</button>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article>
+              <span class="stat-label">Planned runs</span>
+              <strong id="plannedRuns">0</strong>
+            </article>
+            <article>
+              <span class="stat-label">Gym sessions</span>
+              <strong id="plannedGymSessions">0</strong>
+            </article>
+            <article>
+              <span class="stat-label">Long runs</span>
+              <strong id="longRuns">0</strong>
+            </article>
+            <article>
+              <span class="stat-label">Sessions complete</span>
+              <strong id="completedDays">0 / 30</strong>
+            </article>
+            <article>
+              <span class="stat-label">Monday check-ins</span>
+              <strong id="mondayCheckins">0 / 5</strong>
+            </article>
+            <article>
+              <span class="stat-label">Avg intake logged</span>
+              <strong id="averageCalories">0</strong>
+            </article>
+          </div>
+          <p id="saveStatus" class="save-status" aria-live="polite">
+            Original June plan loaded.
+          </p>
+        </aside>
+      </header>
+
+      <div class="workspace-switcher" role="group" aria-label="Choose dashboard section">
+        <button
+          id="plannerTabButton"
+          class="workspace-button is-active"
+          data-section="planner"
+          type="button"
+        >
+          Planner
+        </button>
+        <button
+          id="reportTabButton"
+          class="workspace-button"
+          data-section="report"
+          type="button"
+        >
+          Report
+        </button>
+      </div>
+
+      <main>
+        <section id="plannerWorkspace" class="workspace-panel">
+          <section class="overview-grid" aria-label="Plan overview">
+          <article class="panel-card overview-card objective-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Objectives</p>
+                <h2>Goal Stack</h2>
+              </div>
+              <p class="section-note">Primary first, then physique and muscle goals.</p>
+            </div>
+            <div id="objectivesGrid" class="objective-columns"></div>
+          </article>
+
+          <article class="panel-card overview-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Starting Point</p>
+                <h2>Current Stats</h2>
+              </div>
+            </div>
+            <ul id="statsList" class="info-list"></ul>
+          </article>
+
+          <article class="panel-card overview-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Fueling</p>
+                <h2>Nutrition Targets</h2>
+              </div>
+              <p class="section-note">Long runs step up calories and carbs.</p>
+            </div>
+            <div id="nutritionGrid" class="nutrition-grid"></div>
+          </article>
+
+          <article class="panel-card overview-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Every Morning</p>
+                <h2>5-Minute Mobility</h2>
+              </div>
+            </div>
+            <ol id="mobilityList" class="routine-list"></ol>
+          </article>
+
+          <article class="panel-card overview-card metrics-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Finish Line</p>
+                <h2>June Success Metrics</h2>
+              </div>
+              <p class="section-note">The month is about consistency, recovery, and steady progression.</p>
+            </div>
+            <div id="metricsGrid" class="metrics-grid"></div>
+          </article>
+          </section>
+
+          <section class="calendar-panel" aria-labelledby="calendarHeading">
+          <div class="calendar-header">
+            <div>
+              <p id="calendarEyebrow" class="eyebrow">Month View</p>
+              <h2 id="calendarHeading">June Schedule</h2>
+            </div>
+            <div class="calendar-tools" aria-label="Calendar controls">
+              <div class="view-switcher" role="group" aria-label="Choose calendar view">
+                <button
+                  id="monthViewButton"
+                  class="view-button is-active"
+                  data-view="month"
+                  type="button"
+                >
+                  Month
+                </button>
+                <button
+                  id="weekViewButton"
+                  class="view-button"
+                  data-view="week"
+                  type="button"
+                >
+                  Week
+                </button>
+                <button
+                  id="dayViewButton"
+                  class="view-button"
+                  data-view="day"
+                  type="button"
+                >
+                  Day
+                </button>
+              </div>
+
+              <div class="period-controls">
+                <button id="previousPeriodButton" class="ghost-button" type="button">
+                  Previous
+                </button>
+                <div class="period-copy">
+                  <strong id="periodTitle">Full Month</strong>
+                  <span id="periodSubtitle">June 1 to June 30, 2026</span>
+                </div>
+                <button id="nextPeriodButton" class="ghost-button" type="button">
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+          <p id="calendarNote" class="calendar-note">
+            Every card includes the planned session, nutrition target, and an
+            intake field that feeds the report tab. Monday cards also include
+            editable weight and waist check-ins.
+          </p>
+
+          <div id="calendarScroll" class="calendar-scroll">
+            <div id="weekdayRow" class="weekday-row" aria-hidden="true">
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
+              <span>Sun</span>
+            </div>
+
+            <div id="calendarGrid" class="calendar-grid"></div>
+          </div>
+          </section>
+        </section>
+
+        <section id="reportWorkspace" class="workspace-panel report-workspace" hidden>
+          <section class="panel-card report-intro-card" aria-labelledby="reportHeading">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Monthly Report</p>
+                <h2 id="reportHeading">Fuel, Burn, and Body Metrics</h2>
+              </div>
+              <p class="section-note">
+                Log daily intake in the planner to fill the energy chart.
+                Workout burn is estimated from the planned session type,
+                distance, and your June start weight of 58 kg.
+              </p>
+            </div>
+          </section>
+
+          <section class="report-summary-grid" aria-label="Report summary">
+            <article class="panel-card summary-card">
+              <span class="stat-label">Intake days logged</span>
+              <strong id="loggedIntakeDays">0 / 30</strong>
+            </article>
+            <article class="panel-card summary-card">
+              <span class="stat-label">Average intake</span>
+              <strong id="averageConsumedCalories">--</strong>
+            </article>
+            <article class="panel-card summary-card">
+              <span class="stat-label">Estimated burn</span>
+              <strong id="estimatedBurnTotal">0 kcal</strong>
+            </article>
+            <article class="panel-card summary-card">
+              <span class="stat-label">Latest check-in</span>
+              <strong id="latestCheckinSummary">No data yet</strong>
+            </article>
+          </section>
+
+          <section class="report-grid" aria-label="Report charts and insights">
+            <article class="panel-card report-card report-energy-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Energy Trend</p>
+                  <h2>Calories In vs Potential Burn</h2>
+                </div>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item">
+                  <span class="legend-swatch is-consumed"></span>
+                  Consumed calories
+                </span>
+                <span class="legend-item">
+                  <span class="legend-swatch is-target"></span>
+                  Target calories
+                </span>
+                <span class="legend-item">
+                  <span class="legend-swatch is-burn"></span>
+                  Potential burn
+                </span>
+              </div>
+              <div id="energyChart" class="chart-surface"></div>
+            </article>
+
+            <article class="panel-card report-card report-measurement-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Check-ins</p>
+                  <h2>Weight and Waist Trend</h2>
+                </div>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item">
+                  <span class="legend-swatch is-weight"></span>
+                  Weight (kg)
+                </span>
+                <span class="legend-item">
+                  <span class="legend-swatch is-waist"></span>
+                  Waist (in)
+                </span>
+              </div>
+              <div id="measurementChart" class="chart-surface"></div>
+            </article>
+
+            <article class="panel-card report-card report-insights-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Insights</p>
+                  <h2>June Readout</h2>
+                </div>
+              </div>
+              <ul id="reportInsights" class="insight-list"></ul>
+            </article>
+
+            <article class="panel-card report-card report-table-card">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Weekly Rollup</p>
+                  <h2>Week-by-Week Summary</h2>
+                </div>
+              </div>
+              <div class="report-table-wrap">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Week</th>
+                      <th scope="col">Range</th>
+                      <th scope="col">Avg Intake</th>
+                      <th scope="col">Potential Burn</th>
+                      <th scope="col">Weight</th>
+                      <th scope="col">Waist (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="weeklyReportBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
