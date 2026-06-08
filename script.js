@@ -537,7 +537,7 @@ const calendarState = {
   view: "month",
   selectedDay: todayInMonth ?? 1,
   selectedWeekIndex: 0,
-  monthExpandedDay: null,
+  monthExpandedDay: todayInMonth ?? 1,
 };
 
 syncSelectionFromDay(calendarState.selectedDay);
@@ -1061,6 +1061,7 @@ function createCollapsedMonthCard(day) {
   const date = getDateForDay(day);
   const dayOfWeek = date.getDay();
   const isMonday = dayOfWeek === 1;
+  const shortWeekday = weekdayNames[dayOfWeek].slice(0, 3);
   const plan = dailyPlan[day];
   const progressState = getDayProgressState(day);
   const isExpanded = calendarState.monthExpandedDay === day;
@@ -1080,7 +1081,7 @@ function createCollapsedMonthCard(day) {
       <div class="day-top">
         <div>
           <div class="day-number">${day}</div>
-          <div class="day-name">${weekdayNames[dayOfWeek]}</div>
+          <div class="day-name">${shortWeekday}</div>
         </div>
         <span class="day-badge">${escapeHtml(plan.badge)}</span>
       </div>
@@ -1096,7 +1097,7 @@ function createCollapsedMonthCard(day) {
         <span class="collapsed-status-pill is-${progressState}">
           ${escapeHtml(getDayProgressLabel(progressState))}
         </span>
-        <span class="collapsed-open-copy">${isExpanded ? "Hide details" : "Open details"}</span>
+        <span class="collapsed-open-copy">${isExpanded ? "Editing below" : "Log & details"}</span>
       </div>
     </button>
   `;
@@ -1205,7 +1206,7 @@ function getCalendarViewCopy() {
   return {
     eyebrow: "Month View",
     note:
-      "Month view is compact by default. Click any date or use Today to expand the full workout details below. Green means session complete plus nutrition logged, orange means partial logging, and white means untouched.",
+      "Month view stays compact while the selected day remains editable below the grid. Pick any date to log calories, mark the session complete, review workout details, and add Monday measurements.",
   };
 }
 
@@ -1323,6 +1324,29 @@ function renderMonthDetailPanel() {
   detailCard.id = `month-day-detail-${calendarState.monthExpandedDay}`;
   detailCard.classList.add("detail-day-card");
   monthDetailPanel.appendChild(detailCard);
+}
+
+function revealMonthDetailPanel(force = false) {
+  if (calendarState.view !== "month" || calendarState.monthExpandedDay === null) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    const rect = monthDetailPanel.getBoundingClientRect();
+    const viewportHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+    const isMostlyBelowViewport = rect.top > viewportHeight * 0.7;
+    const isOutsideViewport = rect.top < 0 || rect.bottom > viewportHeight;
+
+    if (!force && !isMostlyBelowViewport && !isOutsideViewport) {
+      return;
+    }
+
+    monthDetailPanel.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
 }
 
 function renderCalendarSection() {
@@ -1905,7 +1929,16 @@ function setCalendarView(view) {
   }
 
   calendarState.view = view;
+
+  if (view === "month") {
+    calendarState.monthExpandedDay = calendarState.selectedDay;
+  }
+
   renderCalendarSection();
+
+  if (view === "month") {
+    revealMonthDetailPanel();
+  }
 }
 
 function movePeriod(step) {
@@ -1996,9 +2029,9 @@ function handleCalendarChange(event) {
 
 function toggleMonthDetail(day) {
   syncSelectionFromDay(day);
-  calendarState.monthExpandedDay =
-    calendarState.monthExpandedDay === day ? null : day;
+  calendarState.monthExpandedDay = day;
   renderCalendarSection();
+  revealMonthDetailPanel(true);
 }
 
 function handleCalendarClick(event) {
@@ -2089,6 +2122,10 @@ todayButton.addEventListener("click", () => {
   }
 
   renderCalendarSection();
+
+  if (calendarState.view === "month") {
+    revealMonthDetailPanel(true);
+  }
 });
 
 clearDataButton.addEventListener("click", clearAllData);

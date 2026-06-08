@@ -601,7 +601,8 @@ button:disabled {
 
 .weekday-row.view-month,
 .calendar-grid.view-month {
-  min-width: 1180px;
+  min-width: 980px;
+  gap: 10px;
 }
 
 .weekday-row.view-day,
@@ -723,6 +724,72 @@ button:disabled {
   min-height: 188px;
   padding: 0;
   border-top-width: 4px;
+}
+
+.calendar-grid.view-month .day-card.is-collapsed {
+  min-height: 118px;
+  border-top-width: 3px;
+  border-radius: 20px;
+}
+
+.calendar-grid.view-month .collapsed-day-button {
+  padding: 10px 11px 11px;
+  gap: 10px;
+}
+
+.calendar-grid.view-month .day-top {
+  gap: 8px;
+}
+
+.calendar-grid.view-month .day-number {
+  font-size: 1.5rem;
+}
+
+.calendar-grid.view-month .day-name {
+  margin-top: 3px;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+.calendar-grid.view-month .day-badge {
+  padding: 5px 8px;
+  font-size: 0.66rem;
+}
+
+.calendar-grid.view-month .collapsed-session {
+  gap: 4px;
+}
+
+.calendar-grid.view-month .collapsed-session-title {
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.calendar-grid.view-month .collapsed-session-copy {
+  display: none;
+}
+
+.calendar-grid.view-month .collapsed-footer {
+  gap: 8px;
+  align-items: center;
+}
+
+.calendar-grid.view-month .collapsed-open-copy {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: inset 0 0 0 1px rgba(58, 43, 24, 0.08);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.calendar-grid.view-month .collapsed-status-pill {
+  min-height: 28px;
+  padding: 6px 10px;
+  font-size: 0.68rem;
 }
 
 .collapsed-day-button {
@@ -1043,6 +1110,10 @@ input:focus {
   display: none !important;
 }
 
+.month-detail-panel {
+  scroll-margin-top: 24px;
+}
+
 .month-detail-panel.is-empty {
   display: block;
 }
@@ -1340,6 +1411,12 @@ input:focus {
     justify-items: stretch;
   }
 
+  .weekday-row.view-month,
+  .calendar-grid.view-month {
+    min-width: 0;
+    gap: 8px;
+  }
+
   .view-switcher,
   .period-controls {
     justify-content: space-between;
@@ -1361,6 +1438,63 @@ input:focus {
   .stats-grid,
   .measurement-grid {
     grid-template-columns: 1fr;
+  }
+
+  .weekday-row.view-month,
+  .calendar-grid.view-month {
+    gap: 4px;
+  }
+
+  .calendar-grid.view-month .day-card.is-collapsed {
+    min-height: 76px;
+    border-radius: 16px;
+  }
+
+  .calendar-grid.view-month .collapsed-day-button {
+    padding: 8px 6px;
+    gap: 6px;
+  }
+
+  .calendar-grid.view-month .day-top {
+    display: grid;
+    gap: 4px;
+  }
+
+  .calendar-grid.view-month .day-number {
+    font-size: 1.2rem;
+  }
+
+  .calendar-grid.view-month .day-name {
+    margin-top: 0;
+    font-size: 0.58rem;
+    letter-spacing: 0.05em;
+  }
+
+  .calendar-grid.view-month .day-badge,
+  .calendar-grid.view-month .collapsed-session,
+  .calendar-grid.view-month .collapsed-status-pill {
+    display: none;
+  }
+
+  .calendar-grid.view-month .collapsed-footer {
+    display: flex;
+    gap: 4px;
+  }
+
+  .calendar-grid.view-month .collapsed-open-copy {
+    min-height: auto;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 0.56rem;
+    letter-spacing: 0.05em;
+  }
+
+  .weekday-row.view-month span {
+    padding: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    text-align: center;
   }
 
   .view-switcher,
