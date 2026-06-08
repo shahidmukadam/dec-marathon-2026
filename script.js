@@ -1206,7 +1206,7 @@ function getCalendarViewCopy() {
   return {
     eyebrow: "Month View",
     note:
-      "Month view stays compact while the selected day remains editable below the grid. Pick any date to log calories, mark the session complete, review workout details, and add Monday measurements.",
+      "Month view shows the full June training grid again, so you can log calories, mark sessions complete, and open workout details directly inside each day card.",
   };
 }
 
@@ -1286,67 +1286,18 @@ function renderCalendar() {
     }
 
     calendarGrid.appendChild(
-      calendarState.view === "month"
-        ? createCollapsedMonthCard(day)
-        : createDayCard(day, calendarState.view === "day"),
+      createDayCard(day, calendarState.view === "day"),
     );
   });
 }
 
 function renderMonthDetailPanel() {
   monthDetailPanel.innerHTML = "";
-
-  if (calendarState.view !== "month") {
-    monthDetailPanel.hidden = true;
-    return;
-  }
-
-  monthDetailPanel.hidden = false;
-
-  if (calendarState.monthExpandedDay === null) {
-    monthDetailPanel.className = "month-detail-panel is-empty";
-    monthDetailPanel.innerHTML = `
-      <div class="month-detail-empty">
-        <p class="eyebrow">Compact Calendar</p>
-        <h3>Pick a date to open the full plan.</h3>
-        <p>
-          Click any date above or use the Today button to expand the workout,
-          calories, and Monday check-in fields for that day.
-        </p>
-      </div>
-    `;
-    return;
-  }
-
-  monthDetailPanel.className = "month-detail-panel is-open";
-
-  const detailCard = createDayCard(calendarState.monthExpandedDay, true);
-  detailCard.id = `month-day-detail-${calendarState.monthExpandedDay}`;
-  detailCard.classList.add("detail-day-card");
-  monthDetailPanel.appendChild(detailCard);
+  monthDetailPanel.hidden = true;
 }
 
 function revealMonthDetailPanel(force = false) {
-  if (calendarState.view !== "month" || calendarState.monthExpandedDay === null) {
-    return;
-  }
-
-  window.requestAnimationFrame(() => {
-    const rect = monthDetailPanel.getBoundingClientRect();
-    const viewportHeight =
-      window.innerHeight || document.documentElement.clientHeight;
-    const isMostlyBelowViewport = rect.top > viewportHeight * 0.7;
-    const isOutsideViewport = rect.top < 0 || rect.bottom > viewportHeight;
-
-    if (!force && !isMostlyBelowViewport && !isOutsideViewport) {
-      return;
-    }
-
-    monthDetailPanel.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  });
+  return force;
 }
 
 function renderCalendarSection() {
@@ -1929,16 +1880,7 @@ function setCalendarView(view) {
   }
 
   calendarState.view = view;
-
-  if (view === "month") {
-    calendarState.monthExpandedDay = calendarState.selectedDay;
-  }
-
   renderCalendarSection();
-
-  if (view === "month") {
-    revealMonthDetailPanel();
-  }
 }
 
 function movePeriod(step) {
@@ -2029,9 +1971,7 @@ function handleCalendarChange(event) {
 
 function toggleMonthDetail(day) {
   syncSelectionFromDay(day);
-  calendarState.monthExpandedDay = day;
   renderCalendarSection();
-  revealMonthDetailPanel(true);
 }
 
 function handleCalendarClick(event) {
@@ -2063,11 +2003,6 @@ function handleCalendarClick(event) {
   }
 
   syncSelectionFromDay(Number(card.dataset.day));
-
-  if (calendarState.view === "month") {
-    toggleMonthDetail(Number(card.dataset.day));
-    return;
-  }
 
   if (calendarState.view !== "day") {
     renderCalendarSection();
@@ -2116,16 +2051,7 @@ todayButton.addEventListener("click", () => {
   }
 
   syncSelectionFromDay(todayInMonth);
-
-  if (calendarState.view === "month") {
-    calendarState.monthExpandedDay = todayInMonth;
-  }
-
   renderCalendarSection();
-
-  if (calendarState.view === "month") {
-    revealMonthDetailPanel(true);
-  }
 });
 
 clearDataButton.addEventListener("click", clearAllData);
